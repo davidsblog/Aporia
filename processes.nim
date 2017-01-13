@@ -383,8 +383,10 @@ proc execThreadProc(){.thread.} =
             createExecThrEvent(EvRecv):
               event.line = line
 
+        var exitcode = p.peekExitCode()
         # Process exited.
-        var exitCode = p.waitForExit()
+        if p.running:
+          exitCode = p.waitForExit()
         p.close()
         started = false
         createExecThrEvent(EvStopped):
